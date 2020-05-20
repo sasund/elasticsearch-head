@@ -890,6 +890,7 @@
 				size: this.config.size,
 				sort: [],
 				aggs: {},
+				track_total_hits: true,
 				version: true
 			};
 			this.defaultClause = this.addClause();
@@ -1177,7 +1178,8 @@
 				from: 0,
 				size: this.config.size,
 				sort: [],
-				aggs: {}
+				aggs: {},
+				track_total_hits: true
 			};
 			this.defaultClause = this.addClause();
 		},
@@ -2817,7 +2819,7 @@
 		defaults: {
 			cluster: null,       // (required) instanceof app.services.Cluster
 			path: "_search",     // default uri to send a request to
-			query: { query: { match_all: { }}},
+			query: { query: { match_all: { }},track_total_hits: true},
 			transform: "  return root;" // default transformer function (does nothing)
 		},
 		init: function(parent) {

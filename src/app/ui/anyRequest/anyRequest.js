@@ -8,7 +8,7 @@
 		defaults: {
 			cluster: null,       // (required) instanceof app.services.Cluster
 			path: "_search",     // default uri to send a request to
-			query: { query: { match_all: { }}},
+			query: { query: { match_all: { }},track_total_hits: true},
 			transform: "  return root;" // default transformer function (does nothing)
 		},
 		init: function(parent) {

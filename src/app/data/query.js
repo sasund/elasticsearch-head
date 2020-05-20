@@ -21,6 +21,7 @@
 				size: this.config.size,
 				sort: [],
 				aggs: {},
+				track_total_hits: true,
 				version: true
 			};
 			this.defaultClause = this.addClause();
