@@ -1219,7 +1219,11 @@
 				query["query"] = value;
 			} else if(op === "missing") {
 				op = "exists";
-				bool = "must_not";
+				if (bool === "must_not") {
+					bool = "must"
+				} else if (bool === "must") {
+					bool = "must_not"
+				}
 				query["field"] = field.substring(field.indexOf(".")+1);
 			} else {
 				query[field.substring(field.indexOf(".")+1)] = value;
@@ -3149,9 +3153,19 @@
                         }).open();
 		},
 		_testAnalyser_handler: function(index) {
-			this.cluster.get(encodeURIComponent( index.name ) + "/_analyze?text=" + encodeURIComponent( prompt( i18n.text("IndexCommand.TextToAnalyze") ) ), function(r) {
-				alert(JSON.stringify(r, true, "  "));
-			});
+			if(this.cluster._version_parts[0] <= 5) {
+				this.cluster.get(encodeURIComponent( index.name ) + "/_analyze?text=" + encodeURIComponent( prompt( i18n.text("IndexCommand.TextToAnalyze") ) ), function(r) {
+					new ui.JsonPanel({ json: r, title: "" });
+				}); 
+			} else {
+				var command = {
+					"analyzer" : prompt( i18n.text("IndexCommand.AnalyzerToUse") ),
+					"text": prompt( i18n.text("IndexCommand.TextToAnalyze") )
+				};
+				this.cluster.post(encodeURIComponent(index.name) + "/_analyze", JSON.stringify(command), function(r) {
+					new ui.JsonPanel({ json: r, title: "" });
+				});
+			}		
 		},
 		_deleteIndexAction_handler: function(index) {
 			if( prompt( i18n.text("AliasForm.DeleteAliasMessage", i18n.text("Command.DELETE"), index.name ) ) === i18n.text("Command.DELETE") ) {
